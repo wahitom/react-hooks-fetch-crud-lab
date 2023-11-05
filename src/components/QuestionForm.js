@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function QuestionForm(props) {
+function QuestionForm() {
   const [formData, setFormData] = useState({
     prompt: "",
     answer1: "",
@@ -19,7 +19,34 @@ function QuestionForm(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(formData);
+
+    fetch("http://localhost:4000/questions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => response.json())
+      .then(() => {
+        // Update the UI by fetching the updated list of questions
+        // and setting the formData back to its initial state.
+        // You can use a state management library like Redux or React Context
+        // for a more efficient way to update the QuestionList component.
+        fetch("http://localhost:4000/questions")
+          .then((response) => response.json())
+          .then((questions) => {
+            // Update the questions state here
+          });
+        setFormData({
+          prompt: "",
+          answer1: "",
+          answer2: "",
+          answer3: "",
+          answer4: "",
+          correctIndex: 0,
+        });
+      });
   }
 
   return (
